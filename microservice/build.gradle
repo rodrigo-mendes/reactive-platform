@@ -1,0 +1,74 @@
+plugins {
+    id "scala"
+    id "application"
+}
+
+group 'io.everis.reactive'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+def scalaVersion = "2.12"
+def scalaFullVersion = scalaVersion + ".8"
+def akkaVersion = "2.5.23"
+
+def compiledScalaTestDir = "build/classes/scala/test"
+
+mainClassName = "io.everis.akka.runners.SimpleClusterApp"
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "org.scala-lang:scala-library:$scalaFullVersion"
+    compile "com.typesafe.akka:akka-actor_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-actor-typed_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-remote_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster-metrics_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster-typed_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster-tools_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-discovery_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-distributed-data_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster-metrics_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster-sharding_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-cluster-sharding-typed_$scalaVersion:$akkaVersion"
+    compile "com.typesafe.akka:akka-multi-node-testkit_$scalaVersion:$akkaVersion"
+    compile "com.lightbend.akka.management:akka-management_$scalaVersion:1.0.1"
+    compile "com.lightbend.akka.management:akka-management-cluster-bootstrap_$scalaVersion:1.0.1"
+    compile "com.lightbend.akka.management:akka-management-cluster-http_$scalaVersion:1.0.1"
+
+    compile "io.kamon:kamon-core_$scalaVersion:1.1.0"
+    compile "io.kamon:kamon-akka-remote-2.5_$scalaVersion:1.1.0"
+    compile "io.kamon:kamon-akka-2.5_$scalaVersion:1.1.4"
+    compile "io.kamon:kamon-zipkin_$scalaVersion:1.0.0"
+    compile "io.kamon:kamon-jaeger_$scalaVersion:1.0.2"
+    compile "io.kamon:kamon-logback_$scalaVersion:1.0.0"
+    compile "io.kamon:kamon-prometheus_$scalaVersion:1.1.2"
+    compile "io.kamon:kamon-influxdb_$scalaVersion:1.0.2"
+
+    compile "io.kamon:kamon-system-metrics_$scalaVersion:1.0.1"
+
+
+    testCompile "com.typesafe.akka:akka-testkit_$scalaVersion:$akkaVersion"
+    testCompile "com.typesafe.akka:akka-actor-testkit-typed_$scalaVersion:$akkaVersion"
+    testCompile "org.scalamock:scalamock_$scalaVersion:4.3.0"
+    testCompile "org.scalatest:scalatest_$scalaVersion:3.0.8"
+    testCompile "org.scalactic:scalactic_$scalaVersion:3.0.8"
+    testCompile "org.scalacheck:scalacheck_$scalaVersion:1.14.0"
+    testCompile "io.cucumber:cucumber-core:4.4.0"
+    testCompile "io.cucumber:cucumber-scala_$scalaVersion:4.4.0"
+    testRuntime "org.pegdown:pegdown:1.4.2"
+
+    testCompile "io.kamon:kamon-testkit_$scalaVersion:1.1.1"
+
+}
+
+task scalaTest(dependsOn: ["testClasses"], type: JavaExec) {
+    main = "org.scalatest.tools.Runner"
+    args = ["-R", compiledScalaTestDir, "-o"]
+    classpath = sourceSets.test.runtimeClasspath
+}
+

@@ -1,0 +1,6 @@
+rootProject.name = 'platform'
+include 'environment'
+include 'stressTest'
+include 'microservice'
+include 'devOps'
+

@@ -1,2 +1,21 @@
 group 'io.everis.reactive'
 version '1.0-SNAPSHOT'
+
+task executeVagrantUp(type:Exec) {
+    workingDir './local'
+    commandLine 'cmd', '/c', 'vagrant' , 'up'
+}
+
+task executeVagrantProvision(type:Exec) {
+    workingDir './local'
+    commandLine 'cmd', '/c', 'vagrant' , 'provision'
+}
+
+task executeVagrantDestroy(type:Exec) {
+    workingDir './local'
+    commandLine 'cmd', '/c', 'vagrant' , 'destroy', '-f'
+}
+
+task recreateVmEnv(dependsOn: ['executeVagrantDestroy', 'executeVagrantUp']){
+    tasks.findByName('executeVagrantUp').mustRunAfter 'executeVagrantDestroy'
+}

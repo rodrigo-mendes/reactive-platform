@@ -1,0 +1,33 @@
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+#load 'config/config.rb'
+
+VAGRANTFILE_API_VERSION = "2"
+
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  ip = "10.0.2.15"
+  config.vm.box_check_update = true
+  config.vm.box = "ubuntu/xenial64" # "centos/7"
+  config.vm.provision "docker"
+  config.vm.define "platform" do |master|
+    master.vm.network :private_network, :ip => "#{ip}"
+    master.vm.network "forwarded_port", guest: 2376, host: 2376, id: "docker"
+    master.vm.network "forwarded_port", guest: 8001, host: 8001, id: "dashboard"
+    master.vm.hostname = "platform-machine"
+    master.vm.provider "virtualbox" do |v|
+      v.memory = 8192
+	  v.cpus = "2"
+	  v.name = "platform-machine"
+    end
+    master.vm.provision :shell, :inline => "sed 's/127.0.0.1.*platform-machine/#{ip} platform-machine/' -i /etc/hosts"
+    master.vm.provision :shell do |s|
+		s.inline = "sh /vagrant/shellscript/install.sh"
+    end
+  end
+end
+
